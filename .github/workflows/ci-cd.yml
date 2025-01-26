@@ -14,39 +14,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
+        
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: Cache Python dependencies
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
-        run: |
-          python3 -m venv .venv
-          source .venv/bin/activate
-          make install
-
-      - name: Debug directory structure
-        run: |
-          echo "Root directory contents:"
-          ls -la
-          echo ".venv directory contents:"
-          ls -la .venv
-
-      - name: Save virtual environment
-        uses: actions/upload-artifact@v3
-        with:
-          name: venv
-          path: .venv
+        run: make install
 
   test:
     runs-on: ubuntu-latest
@@ -60,15 +35,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Restore virtual environment
-        uses: actions/download-artifact@v3
-        with:
-          name: venv
+      - name: Install dependencies
+        run: make install
 
-      - name: Activate virtual environment and run tests
-        run: |
-          source .venv/bin/activate
-          make test
+      - name: Run tests
+        run: make test
 
   lint:
     runs-on: ubuntu-latest
@@ -82,15 +53,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Restore virtual environment
-        uses: actions/download-artifact@v3
-        with:
-          name: venv
+      - name: Install dependencies
+        run: make install
 
-      - name: Activate virtual environment and lint code
-        run: |
-          source .venv/bin/activate
-          make lint
+      - name: Lint code
+        run: make lint
 
   build:
     runs-on: ubuntu-latest
@@ -104,15 +71,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Restore virtual environment
-        uses: actions/download-artifact@v3
-        with:
-          name: venv
+      - name: Install dependencies
+        run: make install
 
-      - name: Activate virtual environment and build package
-        run: |
-          source .venv/bin/activate
-          make build
+      - name: Build package
+        run: make build
 
   # upload:
   #   runs-on: ubuntu-latest
