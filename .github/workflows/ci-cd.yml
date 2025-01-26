@@ -35,6 +35,13 @@ jobs:
           source .venv/bin/activate
           make install
 
+      - name: Debug directory structure
+        run: |
+          echo "Root directory contents:"
+          ls -la
+          echo ".venv directory contents:"
+          ls -la .venv
+
       - name: Save virtual environment
         uses: actions/upload-artifact@v3
         with:
