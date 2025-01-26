@@ -11,8 +11,6 @@ on:
 jobs:
   install:
     runs-on: ubuntu-latest
-    outputs:
-      cache-key: ${{ steps.cache.outputs.cache-hit }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,6 +32,12 @@ jobs:
       - name: Install dependencies
         run: make install
 
+      - name: Save dependencies
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependencies
+          path: ~/.cache/pip
+
   test:
     runs-on: ubuntu-latest
     needs: install
@@ -46,11 +50,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Use cached dependencies
-        uses: actions/cache@v3
+      - name: Restore dependencies
+        uses: actions/download-artifact@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ needs.install.outputs.cache-key }}
+          name: dependencies
 
       - name: Run tests
         run: make test
@@ -67,11 +70,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Use cached dependencies
-        uses: actions/cache@v3
+      - name: Restore dependencies
+        uses: actions/download-artifact@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ needs.install.outputs.cache-key }}
+          name: dependencies
 
       - name: Lint code
         run: make lint
@@ -88,11 +90,10 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Use cached dependencies
-        uses: actions/cache@v3
+      - name: Restore dependencies
+        uses: actions/download-artifact@v3
         with:
-          path: ~/.cache/pip
-          key: ${{ needs.install.outputs.cache-key }}
+          name: dependencies
 
       - name: Build package
         run: make build
