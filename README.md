@@ -75,21 +75,14 @@ bash
 # Build and compile the project
 make install
  
-# Install all development dependencies
-make install-dev
- 
 # Clean the workspace
 make clean
  
 # Run unittests and check coverage
-make run-tests
-make coverage
+make tests
  
 # Check code linting
 make lint
- 
-# Check cloudformation template linting
-make cfn-lint
  
 # To auto style and format python modules
 make black-style
