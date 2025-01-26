@@ -30,7 +30,10 @@ jobs:
             ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: make install
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          make install
 
       - name: Save dependencies
         uses: actions/upload-artifact@v3
