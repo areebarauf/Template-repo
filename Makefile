@@ -10,7 +10,7 @@ install:
 
 # Run tests
 test:
-	$(PYTHON) -m pytest --cov=ci-cd-pipeline-setup src/tests/
+	$(PYTHON) -m pytest --cov=template-repo src/tests/
 
 # Lint code
 lint:
